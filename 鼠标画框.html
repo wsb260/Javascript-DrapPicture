@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>鼠标拖动画矩形</title>
+	<meta http-equiv="content-type" content="text/html;charset=utf-8">
+	<script src="js/jquery-1.11.1.min.js" type="text/javascript" charset="utf-8"></script>
+	<style type="text/css">
+		body,
+		h1,
+		h2,
+		h3,
+		h4,
+		h5,
+		h6,
+		hr,
+		p,
+		blockquote,
+		dl,
+		dt,
+		dd,
+		ul,
+		ol,
+		li,
+		pre,
+		form,
+		fieldset,
+		legend,
+		button,
+		input,
+		textarea,
+		th,
+		td {
+			margin: 0;
+			padding: 0
+		}
+		
+		html {
+			color: #000;
+			overflow-y: scoll;
+			overflow: -moz-scrollbars-vertical
+		}
+		
+		.div {
+			position: absolute;
+			border: 1px dashed blue;
+			width: 0px;
+			height: 0px;
+			left: 0px;
+			top: 0px;
+			overflow: hidden;
+		}
+		
+		.retc {
+			border: 1px solid #CCCCCC;
+			overflow: hidden;
+			background: #EFEFEF
+		}
+		img{
+			width: 200px;
+			height: 100px;
+		}
+	</style>
+</head>
+
+<body>
+	<img src="img/001-021-6002_10.jpg"/>
+</body>
+<script>
+	var DrapPicture = function() {
+
+	}
+
+	DrapPicture.prototype = {
+		init: function() {
+			var wId = "#w";
+			var index = 0;
+			var startX = 0,
+				startY = 0;
+			var flag = false;
+			var retcLeft = "0px",
+				retcTop = "0px",
+				retcHeight = "0px",
+				retcWidth = "0px";
+			document.onmousedown = function(e) {
+				flag = true;
+				try {
+					var evt = window.event || e;
+					var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+					var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+					startX = evt.clientX + scrollLeft;
+					startY = evt.clientY + scrollTop;
+					index++;
+					var div = document.createElement("div");
+					div.id = wId + index;
+					div.className = "div";
+					div.style.marginLeft = startX + "px";
+					div.style.marginTop = startY + "px";
+					div.style.width = "4px";
+					div.style.height = "4px";
+					document.body.appendChild(div);
+				} catch(e) {
+					//alert(e);
+				}
+			}
+			document.onmouseup = function() {
+				try {
+					var div = document.getElementById(wId + index);
+					div.style.border = "1px solid red";
+
+				} catch(e) {
+					//alert(e);
+				}
+				flag = false;
+			}
+			document.onmousemove = function(e) {
+				if(flag) {
+					try {
+						var evt = window.event || e;
+						var scrollTop = document.body.scrollTop || document.documentElement.scrollTop;
+						var scrollLeft = document.body.scrollLeft || document.documentElement.scrollLeft;
+						retcLeft = (startX - evt.clientX - scrollLeft > 0 ? evt.clientX + scrollLeft : startX) + "px";
+						retcTop = (startY - evt.clientY - scrollTop > 0 ? evt.clientY + scrollTop : startY) + "px";
+						retcHeight = Math.abs(startY - evt.clientY - scrollTop) + "px";
+						retcWidth = Math.abs(startX - evt.clientX - scrollLeft) + "px";
+						document.getElementById(wId + index).style.marginLeft = retcLeft;
+						document.getElementById(wId + index).style.marginTop = retcTop;
+						document.getElementById(wId + index).style.width = retcWidth;
+						document.getElementById(wId + index).style.height = retcHeight;
+
+					} catch(e) {
+						//alert(e);
+					}
+				}
+			}
+		}
+	}
+</script>
+<script type="text/javascript">
+	$(function() {
+		var vt = new DrapPicture();
+		vt.init();
+	});
+</script>
+</html>
